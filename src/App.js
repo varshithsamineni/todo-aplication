@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './styles.css';
 import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   const [newItem, setNewItem] = useState("");
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    const localValue = localStorage.getItem("ITEMS");
+    if (localValue == null) return [];
+    return JSON.parse(localValue);
+  });
+
+  useEffect(() => {
+    localStorage.setItem("ITEMS", JSON.stringify(items));
+  }, [items]);
 
   const add = (e) => {
     e.preventDefault();
